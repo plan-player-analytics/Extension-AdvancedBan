@@ -39,7 +39,7 @@ import java.util.UUID;
  *
  * @author Rsl1122
  */
-@PluginInfo(name = "AdvancedBan", iconName = "gavel", iconFamily = Family.SOLID, color = Color.RED)
+@PluginInfo(name = "AdvancedBan", iconName = "gavel", iconFamily = Family.SOLID, color = Color.RED, updatePlayerDataOnLeave = true)
 public class AdvancedBanExtension implements DataExtension {
 
     public AdvancedBanExtension() {
