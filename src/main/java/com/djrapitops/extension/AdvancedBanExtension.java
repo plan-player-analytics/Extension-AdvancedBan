@@ -25,6 +25,7 @@ package com.djrapitops.extension;
 import com.djrapitops.plan.extension.CallEvents;
 import com.djrapitops.plan.extension.DataExtension;
 import com.djrapitops.plan.extension.FormatType;
+import com.djrapitops.plan.extension.NotReadyException;
 import com.djrapitops.plan.extension.annotation.*;
 import com.djrapitops.plan.extension.icon.Color;
 import com.djrapitops.plan.extension.icon.Family;
@@ -57,6 +58,14 @@ public class AdvancedBanExtension implements DataExtension {
         return uuid.toString().replace("-", "");
     }
 
+    private PunishmentManager getPunishmentManager() {
+        try {
+            return PunishmentManager.get();
+        } catch (Exception e) {
+            throw new NotReadyException();
+        }
+    }
+
     @BooleanProvider(
             text = "Banned",
             description = "Is the player banned on AdvancedBan",
@@ -66,7 +75,7 @@ public class AdvancedBanExtension implements DataExtension {
             iconColor = Color.RED
     )
     public boolean isBanned(UUID playerUUID) {
-        return PunishmentManager.get().isBanned(abUUID(playerUUID));
+        return getPunishmentManager().isBanned(abUUID(playerUUID));
     }
 
     @Conditional("banned")
@@ -79,7 +88,7 @@ public class AdvancedBanExtension implements DataExtension {
             playerName = true
     )
     public String banIssuer(UUID playerUUID) {
-        return PunishmentManager.get().getBan(abUUID(playerUUID)).getOperator();
+        return getPunishmentManager().getBan(abUUID(playerUUID)).getOperator();
     }
 
     @Conditional("banned")
@@ -93,7 +102,7 @@ public class AdvancedBanExtension implements DataExtension {
             format = FormatType.DATE_YEAR
     )
     public long banIssueDate(UUID playerUUID) {
-        return PunishmentManager.get().getBan(abUUID(playerUUID)).getStart();
+        return getPunishmentManager().getBan(abUUID(playerUUID)).getStart();
     }
 
     @Conditional("banned")
@@ -107,7 +116,7 @@ public class AdvancedBanExtension implements DataExtension {
             iconColor = Color.RED
     )
     public boolean banWillExpire(UUID playerUUID) {
-        PunishmentType type = PunishmentManager.get().getBan(abUUID(playerUUID)).getType();
+        PunishmentType type = getPunishmentManager().getBan(abUUID(playerUUID)).getType();
         return !(type == PunishmentType.BAN
                 || type == PunishmentType.IP_BAN
                 || type == PunishmentType.MUTE);
@@ -124,7 +133,7 @@ public class AdvancedBanExtension implements DataExtension {
             format = FormatType.DATE_YEAR
     )
     public long banExpireDate(UUID playerUUID) {
-        return PunishmentManager.get().getBan(abUUID(playerUUID)).getEnd();
+        return getPunishmentManager().getBan(abUUID(playerUUID)).getEnd();
     }
 
     @Conditional("banned")
@@ -137,7 +146,7 @@ public class AdvancedBanExtension implements DataExtension {
             iconColor = Color.RED
     )
     public String banReason(UUID playerUUID) {
-        return PunishmentManager.get().getBan(abUUID(playerUUID)).getReason();
+        return getPunishmentManager().getBan(abUUID(playerUUID)).getReason();
     }
 
     @BooleanProvider(
@@ -146,10 +155,11 @@ public class AdvancedBanExtension implements DataExtension {
             priority = 50,
             conditionName = "muted",
             iconName = "bell-slash",
-            iconColor = Color.DEEP_ORANGE
+            iconColor = Color.DEEP_ORANGE,
+            showInPlayerTable = true
     )
     public boolean isMuted(UUID playerUUID) {
-        return PunishmentManager.get().isMuted(abUUID(playerUUID));
+        return getPunishmentManager().isMuted(abUUID(playerUUID));
     }
 
     @Conditional("muted")
@@ -158,11 +168,10 @@ public class AdvancedBanExtension implements DataExtension {
             description = "Who muted the player",
             priority = 49,
             iconName = "user",
-            iconColor = Color.DEEP_ORANGE,
-            playerName = true
+            iconColor = Color.DEEP_ORANGE
     )
     public String muteIssuer(UUID playerUUID) {
-        return PunishmentManager.get().getMute(abUUID(playerUUID)).getOperator();
+        return getPunishmentManager().getMute(abUUID(playerUUID)).getOperator();
     }
 
     @Conditional("muted")
@@ -176,7 +185,7 @@ public class AdvancedBanExtension implements DataExtension {
             format = FormatType.DATE_YEAR
     )
     public long muteIssueDate(UUID playerUUID) {
-        return PunishmentManager.get().getMute(abUUID(playerUUID)).getStart();
+        return getPunishmentManager().getMute(abUUID(playerUUID)).getStart();
     }
 
     @Conditional("muted")
@@ -190,7 +199,7 @@ public class AdvancedBanExtension implements DataExtension {
             iconColor = Color.DEEP_ORANGE
     )
     public boolean muteWillExpire(UUID playerUUID) {
-        PunishmentType type = PunishmentManager.get().getMute(abUUID(playerUUID)).getType();
+        PunishmentType type = getPunishmentManager().getMute(abUUID(playerUUID)).getType();
         return !(type == PunishmentType.BAN
                 || type == PunishmentType.IP_BAN
                 || type == PunishmentType.MUTE);
@@ -207,7 +216,7 @@ public class AdvancedBanExtension implements DataExtension {
             format = FormatType.DATE_YEAR
     )
     public long muteExpireDate(UUID playerUUID) {
-        return PunishmentManager.get().getMute(abUUID(playerUUID)).getEnd();
+        return getPunishmentManager().getMute(abUUID(playerUUID)).getEnd();
     }
 
     @Conditional("muted")
@@ -220,7 +229,7 @@ public class AdvancedBanExtension implements DataExtension {
             iconColor = Color.DEEP_ORANGE
     )
     public String muteReason(UUID playerUUID) {
-        return PunishmentManager.get().getMute(abUUID(playerUUID)).getReason();
+        return getPunishmentManager().getMute(abUUID(playerUUID)).getReason();
     }
 
     @NumberProvider(
@@ -228,10 +237,11 @@ public class AdvancedBanExtension implements DataExtension {
             description = "How many unexpired warnings player has on AdvancedBan",
             priority = 25,
             iconName = "flag",
-            iconColor = Color.AMBER
+            iconColor = Color.AMBER,
+            showInPlayerTable = true
     )
     public long warnings(UUID playerUUID) {
-        return PunishmentManager.get().getWarns(abUUID(playerUUID))
+        return getPunishmentManager().getWarns(abUUID(playerUUID))
                 .stream().filter(warning -> !warning.isExpired()).count();
     }
 

@@ -22,6 +22,7 @@
 */
 package com.djrapitops.extension;
 
+import com.djrapitops.plan.capability.CapabilityService;
 import com.djrapitops.plan.extension.DataExtension;
 
 import java.util.Optional;
@@ -36,7 +37,7 @@ public class AdvancedBanExtensionFactory {
     private boolean isAvailable() {
         try {
             Class.forName("me.leoko.advancedban.Universal");
-            return true;
+            return CapabilityService.getInstance().hasCapability("DATA_EXTENSION_SHOW_IN_PLAYER_TABLE");
         } catch (ClassNotFoundException e) {
             return false;
         }
