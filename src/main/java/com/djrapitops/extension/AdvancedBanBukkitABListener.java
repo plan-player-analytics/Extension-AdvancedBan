@@ -22,46 +22,42 @@
 */
 package com.djrapitops.extension;
 
-import com.djrapitops.plan.capability.CapabilityService;
 import com.djrapitops.plan.extension.Caller;
-import com.djrapitops.plan.extension.DataExtension;
+import me.leoko.advancedban.bukkit.event.PunishmentEvent;
+import me.leoko.advancedban.bukkit.event.RevokePunishmentEvent;
+import me.leoko.advancedban.utils.Punishment;
+import org.bukkit.Bukkit;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.plugin.Plugin;
 
-import java.util.Optional;
+import java.util.UUID;
 
-/**
- * Factory for DataExtension.
- *
- * @author Rsl1122
- */
-public class AdvancedBanExtensionFactory {
+public class AdvancedBanBukkitABListener implements ABListener, Listener {
 
-    private boolean isAvailable(String className) {
-        try {
-            Class.forName(className);
-            return CapabilityService.getInstance().hasCapability("DATA_EXTENSION_SHOW_IN_PLAYER_TABLE");
-        } catch (ClassNotFoundException e) {
-            return false;
-        }
+    private final Caller caller;
+
+    public AdvancedBanBukkitABListener(Caller caller) {
+        this.caller = caller;
     }
 
-    private boolean isAvailable() {
-        return isAvailable("me.leoko.advancedban.Universal");
+    @Override
+    public void register() {
+        Plugin plan = Bukkit.getPluginManager().getPlugin("Plan");
+        Bukkit.getPluginManager().registerEvents(this, plan);
     }
 
-    public Optional<DataExtension> createExtension() {
-        if (isAvailable()) {
-            return Optional.of(new AdvancedBanExtension());
-        }
-        return Optional.empty();
+    @EventHandler
+    public void onPunish(PunishmentEvent event) {
+        Punishment punishment = event.getPunishment();
+        UUID playerUUID = AdvancedBanExtension.fromAbUUID(punishment.getUuid());
+        caller.updatePlayerData(playerUUID, punishment.getName());
     }
 
-    public void registerListener(Caller caller) {
-        // Additional classes used to avoid NoClassDefFoundErrors
-        if (isAvailable("org.bukkit.event.EventHandler")) {
-            ABBukkitListenerFactory.createBukkitListener(caller).register();
-        }
-        if (isAvailable("net.md_5.bungee.event.EventHandler")) {
-            ABBungeeListenerFactory.createBungeeListener(caller).register();
-        }
+    @EventHandler
+    public void onRevoke(RevokePunishmentEvent event) {
+        Punishment punishment = event.getPunishment();
+        UUID playerUUID = AdvancedBanExtension.fromAbUUID(punishment.getUuid());
+        caller.updatePlayerData(playerUUID, punishment.getName());
     }
 }

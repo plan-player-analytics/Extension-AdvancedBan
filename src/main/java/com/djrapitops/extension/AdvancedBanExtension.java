@@ -58,6 +58,14 @@ public class AdvancedBanExtension implements DataExtension {
         return uuid.toString().replace("-", "");
     }
 
+    public static UUID fromAbUUID(String abUUID) {
+        return UUID.fromString(abUUID.substring(0, 8) +
+                '-' + abUUID.substring(8, 12) +
+                '-' + abUUID.substring(12, 16) +
+                '-' + abUUID.substring(16, 20) +
+                '-' + abUUID.substring(20));
+    }
+
     private PunishmentManager getPunishmentManager() {
         try {
             return PunishmentManager.get();

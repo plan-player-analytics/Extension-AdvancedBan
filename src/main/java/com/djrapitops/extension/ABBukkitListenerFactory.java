@@ -22,46 +22,15 @@
 */
 package com.djrapitops.extension;
 
-import com.djrapitops.plan.capability.CapabilityService;
 import com.djrapitops.plan.extension.Caller;
-import com.djrapitops.plan.extension.DataExtension;
-
-import java.util.Optional;
 
 /**
- * Factory for DataExtension.
- *
- * @author Rsl1122
+ * Class layer for
  */
-public class AdvancedBanExtensionFactory {
+class ABBukkitListenerFactory {
 
-    private boolean isAvailable(String className) {
-        try {
-            Class.forName(className);
-            return CapabilityService.getInstance().hasCapability("DATA_EXTENSION_SHOW_IN_PLAYER_TABLE");
-        } catch (ClassNotFoundException e) {
-            return false;
-        }
+    static ABListener createBukkitListener(Caller caller) {
+        return new AdvancedBanBukkitABListener(caller);
     }
 
-    private boolean isAvailable() {
-        return isAvailable("me.leoko.advancedban.Universal");
-    }
-
-    public Optional<DataExtension> createExtension() {
-        if (isAvailable()) {
-            return Optional.of(new AdvancedBanExtension());
-        }
-        return Optional.empty();
-    }
-
-    public void registerListener(Caller caller) {
-        // Additional classes used to avoid NoClassDefFoundErrors
-        if (isAvailable("org.bukkit.event.EventHandler")) {
-            ABBukkitListenerFactory.createBukkitListener(caller).register();
-        }
-        if (isAvailable("net.md_5.bungee.event.EventHandler")) {
-            ABBungeeListenerFactory.createBungeeListener(caller).register();
-        }
-    }
 }
