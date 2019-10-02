@@ -53,6 +53,7 @@ public class AdvancedBanBungeeABListener implements ABListener, Listener {
     public void onPunish(PunishmentEvent event) {
         Punishment punishment = event.getPunishment();
         UUID playerUUID = AdvancedBanExtension.fromAbUUID(punishment.getUuid());
+        if (playerUUID == null) return;
         caller.updatePlayerData(playerUUID, punishment.getName());
     }
 
@@ -60,6 +61,7 @@ public class AdvancedBanBungeeABListener implements ABListener, Listener {
     public void onRevoke(RevokePunishmentEvent event) {
         Punishment punishment = event.getPunishment();
         UUID playerUUID = AdvancedBanExtension.fromAbUUID(punishment.getUuid());
+        if (playerUUID == null) return;
         caller.updatePlayerData(playerUUID, punishment.getName());
     }
 }
