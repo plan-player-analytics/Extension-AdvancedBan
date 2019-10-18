@@ -59,7 +59,7 @@ public class AdvancedBanExtension implements DataExtension {
     }
 
     public static UUID fromAbUUID(String abUUID) {
-        if (abUUID == null || abUUID.isEmpty()) return null;
+        if (abUUID == null || abUUID.isEmpty() || abUUID.length() < 32) return null;
         return UUID.fromString(abUUID.substring(0, 8) +
                 '-' + abUUID.substring(8, 12) +
                 '-' + abUUID.substring(12, 16) +
