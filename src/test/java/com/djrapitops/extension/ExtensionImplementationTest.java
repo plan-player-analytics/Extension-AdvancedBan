@@ -1,5 +1,5 @@
 /*
-    Copyright(c) 2019 Risto Lahtela (Rsl1122)
+    Copyright(c) 2021 AuroraLS3
 
     The MIT License(MIT)
 
@@ -28,14 +28,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.UUID;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 /**
  * Test for the implementation of the new extension
  *
- * @author Rsl1122
+ * @author AuroraLS3
  */
 class ExtensionImplementationTest {
 
@@ -51,13 +47,6 @@ class ExtensionImplementationTest {
     @DisplayName("API is implemented correctly")
     void noImplementationErrors() {
         extractor.validateAnnotations();
-    }
-
-    @Test
-    void abUUIDParses() {
-        UUID expected = UUID.fromString("123e4567-e89b-12d3-a456-556642440000");
-        String test = "123e4567e89b12d3a456556642440000";
-        assertEquals(expected, AdvancedBanExtension.fromAbUUID(test));
     }
 
 }

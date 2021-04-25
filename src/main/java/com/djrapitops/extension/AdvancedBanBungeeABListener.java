@@ -1,5 +1,5 @@
 /*
-    Copyright(c) 2019 Risto Lahtela (Rsl1122)
+    Copyright(c) 2021 AuroraLS3
 
     The MIT License(MIT)
 
@@ -32,8 +32,6 @@ import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.plugin.PluginManager;
 import net.md_5.bungee.event.EventHandler;
 
-import java.util.UUID;
-
 public class AdvancedBanBungeeABListener implements ABListener, Listener {
 
     private final Caller caller;
@@ -52,16 +50,12 @@ public class AdvancedBanBungeeABListener implements ABListener, Listener {
     @EventHandler
     public void onPunish(PunishmentEvent event) {
         Punishment punishment = event.getPunishment();
-        UUID playerUUID = AdvancedBanExtension.fromAbUUID(punishment.getUuid());
-        if (playerUUID == null) return;
-        caller.updatePlayerData(playerUUID, punishment.getName());
+        caller.updatePlayerData(null, punishment.getName());
     }
 
     @EventHandler
     public void onRevoke(RevokePunishmentEvent event) {
         Punishment punishment = event.getPunishment();
-        UUID playerUUID = AdvancedBanExtension.fromAbUUID(punishment.getUuid());
-        if (playerUUID == null) return;
-        caller.updatePlayerData(playerUUID, punishment.getName());
+        caller.updatePlayerData(null, punishment.getName());
     }
 }
