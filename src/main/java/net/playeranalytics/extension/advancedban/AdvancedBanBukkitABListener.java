@@ -20,31 +20,29 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
     THE SOFTWARE.
 */
-package com.djrapitops.extension;
+package net.playeranalytics.extension.advancedban;
 
 import com.djrapitops.plan.extension.Caller;
-import me.leoko.advancedban.bungee.event.PunishmentEvent;
-import me.leoko.advancedban.bungee.event.RevokePunishmentEvent;
+import me.leoko.advancedban.bukkit.event.PunishmentEvent;
+import me.leoko.advancedban.bukkit.event.RevokePunishmentEvent;
 import me.leoko.advancedban.utils.Punishment;
-import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.plugin.Listener;
-import net.md_5.bungee.api.plugin.Plugin;
-import net.md_5.bungee.api.plugin.PluginManager;
-import net.md_5.bungee.event.EventHandler;
+import org.bukkit.Bukkit;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.plugin.Plugin;
 
-public class AdvancedBanBungeeABListener implements ABListener, Listener {
+public class AdvancedBanBukkitABListener implements ABListener, Listener {
 
     private final Caller caller;
 
-    public AdvancedBanBungeeABListener(Caller caller) {
+    public AdvancedBanBukkitABListener(Caller caller) {
         this.caller = caller;
     }
 
     @Override
     public void register() {
-        PluginManager pluginManager = ProxyServer.getInstance().getPluginManager();
-        Plugin plugin = pluginManager.getPlugin("Plan");
-        pluginManager.registerListener(plugin, this);
+        Plugin plan = Bukkit.getPluginManager().getPlugin("Plan");
+        Bukkit.getPluginManager().registerEvents(this, plan);
     }
 
     @EventHandler

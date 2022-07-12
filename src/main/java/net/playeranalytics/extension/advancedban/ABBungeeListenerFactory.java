@@ -20,8 +20,14 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
     THE SOFTWARE.
 */
-package com.djrapitops.extension;
+package net.playeranalytics.extension.advancedban;
 
-interface ABListener {
-    void register();
+import com.djrapitops.plan.extension.Caller;
+
+class ABBungeeListenerFactory {
+
+    static ABListener createBungeeListener(Caller caller) {
+        return new AdvancedBanBungeeABListener(caller);
+    }
+
 }
